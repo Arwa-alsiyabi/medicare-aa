@@ -1,0 +1,119 @@
+package com.medicare.utility;
+
+public class BillRecord {
+    public final int patientId;
+    public final String visitDate;
+    public final double amount;
+
+    public BillRecord(int patientId, String visitDate, double amount) {
+        this.patientId = patientId;
+        this.visitDate = visitDate;
+        this.amount = amount;
+    }
+
+    @Override
+    public String toString() {
+        return "BillRecord{patientId=" + patientId + ", visitDate='" + visitDate + "', amount=" + String.format("%.2f", amount) + "}";
+    }
+}
+
+package com.medicare.utility;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Scanner;
+
+/**
+ * Task 4 - Utility class (Collections) + Menu Driven Program
+ * Uses ArrayList (utility class/collection) to store BillRecord objects
+ */
+public class MenuMain {
+    public static void main(String[] args) {
+        ArrayList<BillRecord> records = new ArrayList<>(); // i. Create object of utility class
+
+        try (Scanner sc = new Scanner(System.in)) {
+            while (true) {
+                System.out.println("\n=== Utility Menu (ArrayList) ===");
+                System.out.println("1) Add BillRecord");
+                System.out.println("2) Display BillRecord by index");
+                System.out.println("3) Remove BillRecord by index");
+                System.out.println("4) Iterate and show all records");
+                System.out.println("5) Exit");
+                System.out.print("Choose: ");
+
+                String choice = sc.nextLine().trim();
+
+                switch (choice) {
+                    case "1":
+                        // ii. Add element via keyboard
+                        System.out.print("Patient ID: ");
+                        int pid = Integer.parseInt(sc.nextLine().trim());
+                        System.out.print("Visit Date (YYYY-MM-DD): ");
+                        String date = sc.nextLine().trim();
+                        System.out.print("Amount (OMR): ");
+                        double amt = Double.parseDouble(sc.nextLine().trim());
+
+                        BillRecord br = new BillRecord(pid, date, amt);
+                        records.add(br);
+                        System.out.println("Added: " + br);
+                        break;
+
+                    case "2":
+                        // ii. display an element
+                        if (records.isEmpty()) {
+                            System.out.println("No records to display.");
+                            break;
+                        }
+                        System.out.print("Enter index (0 to " + (records.size()-1) + "): ");
+                        int idx = Integer.parseInt(sc.nextLine().trim());
+                        if (idx < 0 || idx >= records.size()) {
+                            System.out.println("Invalid index.");
+                        } else {
+                            System.out.println("Record: " + records.get(idx));
+                        }
+                        break;
+
+                    case "3":
+                        // iii. remove an element
+                        if (records.isEmpty()) {
+                            System.out.println("No records to remove.");
+                            break;
+                        }
+                        System.out.print("Enter index to remove (0 to " + (records.size()-1) + "): ");
+                        int ridx = Integer.parseInt(sc.nextLine().trim());
+                        if (ridx < 0 || ridx >= records.size()) {
+                            System.out.println("Invalid index.");
+                        } else {
+                            BillRecord removed = records.remove(ridx);
+                            System.out.println("Removed: " + removed);
+                        }
+                        break;
+
+                    case "4":
+                        // iv. iterate through utility class
+                        if (records.isEmpty()) {
+                            System.out.println("No records found.");
+                            break;
+                        }
+                        System.out.println("--- All BillRecords ---");
+                        Iterator<BillRecord> it = records.iterator();
+                        int i = 0;
+                        while (it.hasNext()) {
+                            System.out.println((i++) + ": " + it.next());
+                        }
+                        break;
+
+                    case "5":
+                        System.out.println("Goodbye!");
+                        return;
+
+                    default:
+                        System.out.println("Invalid choice.");
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error in menu: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+}
